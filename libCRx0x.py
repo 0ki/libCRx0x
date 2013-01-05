@@ -11,6 +11,13 @@ import binascii
 import time
 import struct
 
+#TODO:
+#Not yet implemented:
+#
+# none of at least 17 \x02\xxx commands
+# none of at least one \x03\xxx command
+# \x03\x01 reads AT88RF020 card serial number
+
 class crx:
   def __init__(self, port, safetywarnings=False):
     # open port
@@ -104,6 +111,11 @@ class crx:
     else:
       return binascii.hexlify(node[1])
 
+
+  def setNode(self,node):
+    node=self.__sendCommand('\x03\x01'+node[0:2])
+    return not node[0]
+
   def setAntenna(self,on):
     return self.__sendCommand('\x0c\x01'+ ('\x01' if on else '\x00'))
 
@@ -121,4 +133,11 @@ class crx:
     if(delay>255): delay=255
     return self.__sendCommand('\x06\x01'+chr(delay))
 
-
+  def setMode(self,mode):
+    return self.__sendCommand('\x08\x01'+ mode)
+  # modes supported on my CR500F: (please let me know if other modes exist)
+  # \x31 ??
+  # \x41 mifare ultralight
+  # \x42 ??
+  # \x72 AT88RF020
+  # \x73 ??
