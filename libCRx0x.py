@@ -20,7 +20,6 @@ import struct
 
 class crx:
   def __init__(self, port, safetywarnings=False):
-    # open port
     self.__safetywarnings=safetywarnings
     self.__s = serial.Serial(port, 19200)
     self.speed(19200)
@@ -52,7 +51,6 @@ class crx:
     leng = 99999
     self.__expect('\xaa\xbb')
 
- # need to strip aa00 another way - later on 
     while (leng > len(an)):
       an += self.__s.read()
       try:
@@ -134,7 +132,7 @@ class crx:
     return self.__sendCommand('\x06\x01'+chr(delay))
 
   def setMode(self,mode):
-    return self.__sendCommand('\x08\x01'+ mode)
+    return self.__sendCommand('\x08\x01'+ chr(mode))
   # modes supported on my CR500F: (please let me know if other modes exist)
   # \x31 ??
   # \x41 mifare ultralight
